@@ -1,6 +1,8 @@
-package com.example.kafkaBasics.producers.builders;
+package com.example.kafkaBasics.producer.builder;
 
 import org.apache.kafka.clients.producer.ProducerRecord;
+
+import static java.util.Objects.nonNull;
 
 public class ProducerRecordBuilder<K, V> {
 
@@ -16,22 +18,30 @@ public class ProducerRecordBuilder<K, V> {
     }
 
     public ProducerRecordBuilder withTopic(String topic) {
-        this.topic = topic;
+        if(nonNull(topic)) {
+            this.topic = topic;
+        }
         return this;
     }
 
     public ProducerRecordBuilder withPartition(Integer partition) {
-        this.partition = partition;
+        if(nonNull(partition)) {
+            this.partition = partition;
+        }
         return this;
     }
 
     public ProducerRecordBuilder withKey(K key) {
-        this.key = key;
+        if(nonNull(key)) {
+            this.key = key;
+        }
         return this;
     }
 
     public ProducerRecordBuilder withValue(V value) {
-        this.value = value;
+        if(nonNull(value)) {
+            this.value = value;
+        }
         return this;
     }
 

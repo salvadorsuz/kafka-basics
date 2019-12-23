@@ -16,11 +16,9 @@ import java.util.function.Function;
 import java.util.stream.IntStream;
 
 @Service("IterativeDataProducer")
-public class IterativeDataProducer implements DataProducer {
+public class IterativeDataProducer {
 
     private static final Logger logger = LoggerFactory.getLogger(IterativeDataProducer.class);
-
-    private static final Integer NUM_ITERATIONS = 1000;
 
     @Autowired
     @Qualifier("KafkaProducerFactory")
@@ -38,15 +36,14 @@ public class IterativeDataProducer implements DataProducer {
     private BiFunction<String, String, ProducerRecord> getRecord =
             (String topic, String msg) -> new ProducerRecordBuilder().withTopic(topic).withValue(msg).build();
 
-    @Override
-    public void produce(String topic) {
+    public void produce(String topic, Integer numIterations) {
         // create producer
         Producer<String, String> producer = kafkaProducerFactory.getProducer();
         logger.info("Producer created************");
 
         try {
             //produce data to topic
-            IntStream.range(0, NUM_ITERATIONS).boxed()
+            IntStream.range(0, numIterations).boxed()
                     .map(getMessage)
                     .map(msg -> getRecord.apply(topic, msg))
                     .forEach(record -> producer.send(record, simpleCallback));
